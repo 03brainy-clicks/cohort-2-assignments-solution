@@ -1,6 +1,11 @@
-const jwt = require('jsonwebtoken');
-const jwtPassword = 'secret';
+const jwt = require("jsonwebtoken");
+const jwtPassword = "secret";
+const zod = require("zod");
 
+// Define validation schemas using Zod
+const validUsername = zod.string().email();
+const validPassword = zod.string().min(6);
+const validToken = zod.string();
 
 /**
  * Generates a JWT for a given username and password.
@@ -14,7 +19,21 @@ const jwtPassword = 'secret';
  *                        the password does not meet the length requirement.
  */
 function signJwt(username, password) {
-    // Your code here
+  // Check both username and password using safeParse
+  const usernameResult = validUsername.safeParse(username);
+  const passwordResult = validPassword.safeParse(password);
+
+  // Check if both username and password are valid
+  if (usernameResult.success && passwordResult.success) {
+    // Sign and return the JWT with username and password in the payload
+    return jwt.sign(
+      { username: usernameResult.data, password: passwordResult.data },
+      jwtPassword
+    );
+  }
+
+  // Return null if either username or password is not valid
+  return null;
 }
 
 /**
@@ -26,7 +45,23 @@ function signJwt(username, password) {
  *                    using the secret key.
  */
 function verifyJwt(token) {
-    // Your code here
+  // Check if the token is a valid string using safeParse
+  const tokenResult = validToken.safeParse(token);
+
+  // Check if the token is valid before attempting to verify
+  if (tokenResult.success) {
+    try {
+      // Verify the token using the secret key and check if username exists
+      const verifyToken = jwt.verify(token, jwtPassword);
+      return Boolean(verifyToken.username);
+    } catch (error) {
+      // Handle verification errors, e.g., invalid token, expired token, etc.
+      return false;
+    }
+  }
+
+  // Return false if the token is not a valid string
+  return false;
 }
 
 /**
@@ -37,10 +72,26 @@ function verifyJwt(token) {
  *                         Returns false if the token is not a valid JWT format.
  */
 function decodeJwt(token) {
-    // Your code here
+  // Check if the token is a valid string using safeParse
+  const tokenResult = validToken.safeParse(token);
+
+  // Check if the token is valid before attempting to decode
+  if (tokenResult.success) {
+    try {
+      // Decode the token and check if username and password exist
+      const decode = jwt.decode(token, jwtPassword);
+      return Boolean(decode?.username && decode?.password);
+    } catch (error) {
+      // Handle decoding errors, e.g., invalid token format
+      return false;
+    }
+  }
+
+  // Return false if the token is not a valid string
+  return false;
 }
 
-
+// Export the functions and JWT password
 module.exports = {
   signJwt,
   verifyJwt,
