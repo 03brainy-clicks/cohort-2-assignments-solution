@@ -1,11 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors"); 
 const cardsRoutes = require("./routes/identityRoutes");
 const app = express();
 
 // Parsing .env file
 require("dotenv").config();
+
+// Use cors middleware 
+app.use(cors());
 
 // Body parser middleware
 app.use(express.json());
