@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script>
+    let globalId = 1;
+    let todoState = [];
+    let oldTodoState = [];
+
+    function addTodoToDom(todo) {
+      const todosContainer = document.getElementById("todos");
+      const todoDiv = document.createElement("div");
+      todoDiv.innerHTML = `<strong>${todo.title}</strong>: ${todo.description} <button onclick="removeTodoFromDom(${todo.id})">Remove</button>`;
+      todosContainer.appendChild(todoDiv);
+    }
+
+    function removeTodoFromDom(todoId) {
+      const todosContainer = document.getElementById("todos");
+      const todoDiv = document.getElementById(`todo_${todoId}`);
+      todosContainer.removeChild(todoDiv);
+    }
+
+    function updateTodoInDom(oldTodo, newTodo) {
+      removeTodoFromDom(oldTodo.id);
+      addTodoToDom(newTodo);
+    }
+
+    function updateState(newTodos) {
+      const added = [];
+      const deleted = [];
+      const updated = [];
+
+      newTodos.forEach((newTodo) => {
+        const oldTodo = oldTodoState.find((todo) => todo.id === newTodo.id);
+
+        if (!oldTodo) {
+          added.push(newTodo);
+        } else if (JSON.stringify(oldTodo) !== JSON.stringify(newTodo)) {
+          updated.push({ oldTodo, newTodo });
+        }
+      });
+
+      oldTodoState.forEach((oldTodo) => {
+        const stillExists = newTodos.some((todo) => todo.id === oldTodo.id);
+
+        if (!stillExists) {
+          deleted.push(oldTodo);
+        }
+      });
+
+      added.forEach(addTodoToDom);
+      deleted.forEach((todo) => removeTodoFromDom(todo.id));
+      updated.forEach(({ oldTodo, newTodo }) => updateTodoInDom(oldTodo, newTodo));
+
+      oldTodoState = newTodos;
+    }
+
+    function addTodo() {
+      const title = document.getElementById("title").value;
+      const description = document.getElementById("description").value;
+      const newTodo = {
+        title: title,
+        description: description,
+        id: globalId++,
+      };
+
+      todoState.push(newTodo);
+      addTodoToDom(newTodo);
+      updateState(todoState);
+
+      // Clear input fields
+      document.getElementById("title").value = "";
+      document.getElementById("description").value = "";
+    }
+  </script>
+</head>
+
+<body>
+  <input type="text" id="title" placeholder="Todo title"><br><br>
+  <input type="text" id="description" placeholder="Todo description"><br><br>
+  <button onclick="addTodo()">Add todo</button><br><br>
+
+  <div id="todos"></div>
+</body>
+
+</html>
