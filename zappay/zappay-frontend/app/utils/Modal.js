@@ -51,5 +51,4 @@ const Modal = ({ isOpen, onClose, children }) => {
   return isBrowser ? ReactDOM.createPortal(modalContent, document.body) : null;
 };
 
-// Export the 'Modal' component for use in other parts of the application
 export default Modal;
