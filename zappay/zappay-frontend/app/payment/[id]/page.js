@@ -11,8 +11,10 @@ const PaymentModelCard = () => {
   const [amount, setAmount] = useState(0);
   const auth = useRecoilValue(authState);
   const router = useRouter();
+
   const handlePay = async (e) => {
     e.preventDefault();
+
     try {
       if (amount && id) {
         const transferDetails = { receiver: id, amount };
@@ -30,6 +32,8 @@ const PaymentModelCard = () => {
         setAmount(0);
         router.push("/dashboard");
       } else {
+        // Handle case where amount or id is not present
+        console.log("Invalid amount or receiver ID");
       }
     } catch (error) {
       console.log("Transaction failed ", error);

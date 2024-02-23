@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Fetch user details based on authentication information
 export const fetchUserDetails = async (auth, setUser) => {
   try {
     const response = await axios.get(
@@ -10,7 +11,11 @@ export const fetchUserDetails = async (auth, setUser) => {
         },
       }
     );
+    
+    // Set the user details in the state or context
     setUser(response.data.user);
+
+    // Return the user details for potential further use
     return response.data.user;
   } catch (error) {
     console.error("Error fetching user details:", error);
@@ -18,6 +23,7 @@ export const fetchUserDetails = async (auth, setUser) => {
   }
 };
 
+// Fetch account balance based on authentication information
 export const fetchAccountBalance = async (auth) => {
   try {
     const response = await axios.get(
@@ -28,13 +34,16 @@ export const fetchAccountBalance = async (auth) => {
         },
       }
     );
+    
+    // Return the account balance data
     return response.data;
   } catch (error) {
-    console.error("Error fetching user account:", error);
+    console.error("Error fetching user account balance:", error);
     throw error;
   }
 };
 
+// Fetch a list of users based on authentication information
 export const fetchUsers = async (auth) => {
   try {
     const response = await axios.get(
@@ -45,13 +54,16 @@ export const fetchUsers = async (auth) => {
         },
       }
     );
+    
+    // Return the list of users
     return response.data.users;
   } catch (error) {
-    console.error("Error fetching users :", error);
+    console.error("Error fetching users:", error);
     throw error;
   }
 };
 
+// Fetch user transactions based on authentication information
 export const fetchTransactions = async (auth) => {
   try {
     const response = await axios.get(
@@ -62,9 +74,11 @@ export const fetchTransactions = async (auth) => {
         },
       }
     );
+    
+    // Return the list of user transactions
     return response.data.transactions;
   } catch (error) {
-    console.error("Error fetching user account:", error);
+    console.error("Error fetching user transactions:", error);
     throw error;
   }
 };

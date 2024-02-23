@@ -1,6 +1,8 @@
+// Import necessary dependencies
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 
+// Define the 'DropDown' component
 const DropDown = ({ title, value, options, setValue, icon }) => {
   // State to manage the visibility of the dropdown
   const [toggle, setToggle] = useState(false);
@@ -36,11 +38,13 @@ const DropDown = ({ title, value, options, setValue, icon }) => {
   }, []);
 
   return (
+    // Main container for the dropdown
     <div className=" w-full rounded">
       <div
         className="relative w-full rounded "
         ref={dropdownRef}
       >
+        {/* Dropdown header (toggle button) */}
         <div
           onClick={handleToggle}
           className="py-2 bg-orange-600  flex items-center gap-1 justify-center text-white px-2 rounded-md text-sm w-full "
@@ -48,6 +52,7 @@ const DropDown = ({ title, value, options, setValue, icon }) => {
           {icon && icon} {value}
         </div>
 
+        {/* Dropdown content */}
         {toggle && (
           <div className="z-50 absolute top-10 w-full m-0 p-0  rounded-md">
             {/* Display options in the dropdown */}
@@ -69,4 +74,5 @@ const DropDown = ({ title, value, options, setValue, icon }) => {
   );
 };
 
+// Export the 'DropDown' component for use in other parts of the application
 export default DropDown;

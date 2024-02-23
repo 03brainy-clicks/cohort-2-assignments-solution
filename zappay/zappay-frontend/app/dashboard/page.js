@@ -10,10 +10,16 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const Page = () => {
+  // State for filtering users
   const [filter, setFilter] = useState({ value: "all", title: "All" });
+  // State for storing users data
   const [usersData, setUsersData] = useState([]);
+  // State for search input
   const [search, setSearch] = useState("");
+  // Get authenticated user information
   const auth = useRecoilValue(authState);
+
+  // Query to fetch account balance
   const {
     isLoading: loadingBalance,
     error: balanceError,
@@ -23,6 +29,7 @@ const Page = () => {
     queryFn: () => fetchAccountBalance(auth),
   });
 
+  // Query to fetch users list
   const {
     isLoading: usersLoading,
     error: usersError,
@@ -32,6 +39,7 @@ const Page = () => {
     queryFn: () => fetchUsers(auth),
   });
 
+  // Function to handle user search
   const handleSearch = async () => {
     try {
       const response = await axios.get(
@@ -53,6 +61,7 @@ const Page = () => {
     }
   };
 
+  // Dropdown filter options
   const filterOptions = [
     { value: "all", title: "All" },
     {
@@ -73,10 +82,12 @@ const Page = () => {
     <div className="w-full md:w-10/12 lg:w-9/12 mx-auto h-screen p-5 overflow-hidden">
       <div className="pt-16 h-full">
         <div className="flex flex-col gap-5 h-full">
+          {/* Display account balance */}
           <div className="text-sm text-white">
             Account Balance :{" "}
             <span className="text-orange-600">{account?.accountBalance}</span>
           </div>
+          {/* Filter and search input */}
           <div className="flex gap-3 items-center">
             <div className="max-w-32 w-full">
               <DropDown
@@ -99,8 +110,10 @@ const Page = () => {
               <MagnifyingGlassIcon className="w-5" />
             </button>{" "}
           </div>
+          {/* Display list of users */}
           <div className="text-sm text-white mt-4">Users</div>
           <div className="text-sm space-y-2 h-full overflow-y-scroll">
+            {/* Check if filtered data exists, otherwise display all users */}
             {usersData.length > 0 ? (
               <>
                 {usersData?.map((user) => {

@@ -1,9 +1,14 @@
+// Import necessary dependencies
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 
+// Define the 'Modal' component
 const Modal = ({ isOpen, onClose, children }) => {
+  // State to track whether the component is rendered in the browser
   const [isBrowser, setIsBrowser] = useState(false);
+
+  // Ref to track the modal container for detecting clicks outside
   const modalRef = useRef();
 
   // Set isBrowser to true on component mount
@@ -42,7 +47,9 @@ const Modal = ({ isOpen, onClose, children }) => {
     </div>
   );
 
+  // Use ReactDOM.createPortal to render modal content into the document body
   return isBrowser ? ReactDOM.createPortal(modalContent, document.body) : null;
 };
 
+// Export the 'Modal' component for use in other parts of the application
 export default Modal;

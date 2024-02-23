@@ -1,15 +1,22 @@
+/* Apply base styles from Tailwind CSS */
 @tailwind base;
+
+/* Apply component styles from Tailwind CSS */
 @tailwind components;
+
+/* Apply utility styles from Tailwind CSS */
 @tailwind utilities;
 
+/* Apply global styles to all elements */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  @apply select-none;
+  @apply select-none; /* Apply the 'select-none' utility class from Tailwind CSS */
 }
 
+/* Customize scrollbar styles for WebKit browsers (e.g., Chrome, Safari) */
 *::-webkit-scrollbar {
   width: 4px !important;
   height: 0px !important;
@@ -27,10 +34,12 @@
   width: 1px;
 }
 
+/* Apply transition animations to elements with the 'animate' class */
 .animate {
   @apply transition-all duration-300;
 }
 
+/* Set a background image for elements with the 'background' class */
 .background {
   background-image: url("../public/background.svg");
   background-size: cover;

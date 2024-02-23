@@ -12,7 +12,7 @@ import {
 import { useSetRecoilState } from "recoil";
 import { authState } from "@/app/recoil/atoms/AuthAtom";
 
-const Page = () => {
+const SigninPage = () => { // Updated component name to reflect its purpose
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({
@@ -20,10 +20,9 @@ const Page = () => {
     passwordErr: false,
   });
   const setAuth = useSetRecoilState(authState);
-
   const router = useRouter();
 
-  // Reseting the state
+  // Resetting the state
   const handleReset = () => {
     setUsername("");
     setPassword("");
@@ -42,11 +41,14 @@ const Page = () => {
 
     if (usernameValid && passwordValid) {
       try {
+        // API call to authenticate user
         const response = await axios.post(
           "https://paytm-clone-backend-production.up.railway.app/api/users/signin",
           { username, password }
         );
         const data = await response.data;
+
+        // Reset form, set authentication state, and navigate to dashboard
         handleReset();
         setAuth({
           JWT: `Bearer ${data.token}`,
@@ -55,14 +57,16 @@ const Page = () => {
         });
         router.push("/dashboard");
       } catch (error) {
-        console.log(error);
+        console.error("Signin failed:", error);
+        // Additional error handling can be added here, e.g., show an error message to the user
       }
     }
   };
 
+  // JSX for rendering the signin form
   return (
     <div className="w-screen h-screen flex items-center p-5 justify-center">
-      <div className="w-full sm:w-2/3 md:w-1/2  lg:w-2/5 p-5 rounded bg-white">
+      <div className="w-full sm:w-2/3 md:w-1/2 lg:w-2/5 p-5 rounded bg-white">
         <h2 className="font-bold text-2xl mb-2 tracking-tight flex items-center justify-center gap-1">
           Welcome to Zap <WalletIcon className="w-8 text-orange-600" />
         </h2>
@@ -70,6 +74,7 @@ const Page = () => {
           Quick, Fast and Secure payments
         </p>
         <form action="" className="space-y-2 mt-5">
+          {/* Form fields with validation messages */}
           <div>
             <label htmlFor="username" className="text-xs font-medium">
               Username
@@ -88,7 +93,8 @@ const Page = () => {
                 Username must be greater than 3 characters.
               </p>
             )}
-          </div>{" "}
+          </div>
+          {/* Password input with validation messages and reset link */}
           <div>
             <label htmlFor="firstName" className="text-xs font-medium">
               Password{" "}
@@ -116,6 +122,7 @@ const Page = () => {
               .
             </p>
           </div>
+          {/* Signin and Reset buttons */}
           <div className="pt-3 clas flex items-center gap-3">
             <button
               onClick={handleSignin}
@@ -131,6 +138,7 @@ const Page = () => {
             </button>
           </div>
         </form>
+        {/* Separators and Registration link */}
         <div className="flex items-center gap-3">
           <div className="border-b flex-1 "> </div>
           <p className="text-center text-xs py-3 text-gray-500">OR</p>
@@ -139,7 +147,7 @@ const Page = () => {
         <p className="text-center text-xs">
           Don&apos;t have an account?{" "}
           <Link href={"/auth/signup"}>
-            <span className="text-orange-600 cursor-pointer">Resgister</span>
+            <span className="text-orange-600 cursor-pointer">Register</span>
           </Link>
           .
         </p>
@@ -148,4 +156,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SigninPage; 

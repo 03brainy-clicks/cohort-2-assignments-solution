@@ -12,12 +12,13 @@ const PasswordCard = ({ auth }) => {
     confirmPassErr: false,
   });
   const router = useRouter();
+
   const handleReset = useCallback(() => {
     setConfirmPass("");
     setNewPass("");
     setError({
       newPassErr: false,
-      confirmPass: false,
+      confirmPassErr: false,
     });
   }, []);
 
@@ -41,6 +42,7 @@ const PasswordCard = ({ auth }) => {
 
     if (newPassValid && confirmPassValid) {
       try {
+        // API call to update the password
         const response = await axios.put(
           `https://paytm-clone-backend-production.up.railway.app/api/users/resetpassword/${auth.userId}`,
           {
@@ -55,15 +57,18 @@ const PasswordCard = ({ auth }) => {
         );
         router.push("/");
       } catch (error) {
-        console.log(error);
+        console.error("Password update failed:", error);
+        // Additional error handling can be added here, e.g., show an error message to the user
       }
     }
   };
 
+  // JSX for rendering the password update form
   return (
     <div className="flex items-center justify-center">
       <div className="w-full p-5 rounded bg-white">
         <form action="" className="space-y-3">
+          {/* Input for current password */}
           <div>
             <input
               type="password"
@@ -74,6 +79,7 @@ const PasswordCard = ({ auth }) => {
               className="w-full rounded text-sm py-1 px-2 outline-orange-600 border"
             />
           </div>
+          {/* Input for new password with validation messages */}
           <div>
             <input
               type="password"
@@ -92,6 +98,7 @@ const PasswordCard = ({ auth }) => {
               </p>
             )}
           </div>
+          {/* Input for confirming new password with validation messages */}
           <div>
             <input
               type="password"
@@ -109,6 +116,7 @@ const PasswordCard = ({ auth }) => {
               </p>
             )}
           </div>
+          {/* Button for updating the password */}
           <div className="flex items-center gap-3">
             <button
               onClick={handleUpdatePassword}
